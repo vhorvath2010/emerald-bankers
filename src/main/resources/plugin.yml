@@ -1,0 +1,5 @@
+name: Emerald Bankers
+version: 1.0
+author: Vhbob
+description: An emerald banking GUI plugin
+main: com.vhbob.emeraldbankers.EmeraldBankers
