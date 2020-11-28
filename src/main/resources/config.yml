@@ -1,4 +1,4 @@
 banker-name: '&A&LBanker'
 banker-cost: 64
 banker-hp: 100
-inventory-name: '&A&LYour Bank'
+bank-title: '&A&LYour Bank'

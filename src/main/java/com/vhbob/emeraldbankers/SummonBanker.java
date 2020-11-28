@@ -21,6 +21,9 @@ public class SummonBanker implements CommandExecutor {
                 if (player.hasPermission("banker.summon")) {
                     FileConfiguration config = EmeraldBankers.getPlugin().getConfig();
                     int cost = config.getInt("banker-cost");
+                    if (player.hasPermission("banker.free")) {
+                        cost = 0;
+                    }
                     if (cost <= EmeraldBankers.getEconomy().getBalance(player)) {
                         // Take money
                         EmeraldBankers.getEconomy().withdrawPlayer(player, cost);
@@ -30,11 +33,14 @@ public class SummonBanker implements CommandExecutor {
                         banker.setCustomNameVisible(true);
                         banker.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(config.getDouble("banker-hp"));
                         banker.setHealth(config.getDouble("banker-hp"));
-                        banker.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, Integer.MAX_VALUE, false, false, false));
-                        player.sendMessage(ChatColor.GREEN + "Villager spawned!");
+                        banker.setAI(false);
+                        banker.setCollidable(false);
+                        player.sendMessage(ChatColor.GREEN + "Banker spawned!");
                     } else {
                         player.sendMessage(ChatColor.RED + "Error: You need " + cost + " deposited emeralds to do this!");
                     }
+                } else {
+                    player.sendMessage(ChatColor.RED + "You do not have permission to summon a banker!");
                 }
             } else {
                 sender.sendMessage(ChatColor.RED + "Error: You are not a player!");

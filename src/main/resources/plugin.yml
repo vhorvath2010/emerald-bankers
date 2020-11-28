@@ -7,3 +7,12 @@ commands:
     summonBanker:
         aliases: [summonb, sumb, sbanker]
         description: Summon a banker, for a cost!
+permissions:
+    banker.summon:
+        description: Allows the user to summon a banker
+    banker.free:
+        description: Allows the user to summon a banker for free
+    bank.single:
+        description: Provides the user a single chest as a bank
+    bank.double:
+        description: Provides the user a double chest as a bank
