@@ -1,5 +1,9 @@
-name: Emerald Bankers
+name: EmeraldBankers
 version: 1.0
 author: Vhbob
 description: An emerald banking GUI plugin
 main: com.vhbob.emeraldbankers.EmeraldBankers
+commands:
+    summonBanker:
+        aliases: [summonb, sumb, sbanker]
+        description: Summon a banker, for a cost!
