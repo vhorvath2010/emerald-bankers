@@ -1,6 +1,5 @@
 package com.vhbob.emeraldbankers;
 
-import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -9,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +28,7 @@ public class BankerInteract implements Listener {
     public void onClickBanker(PlayerInteractAtEntityEvent e) {
         // Check if they clicked a banker
         String bankerName = ChatColor.translateAlternateColorCodes('&', config.getString("banker-name"));
-        if (e.getRightClicked().getCustomName().equalsIgnoreCase(bankerName)) {
+        if (e.getRightClicked().getCustomName() != null && e.getRightClicked().getCustomName().equalsIgnoreCase(bankerName)) {
             // Open banker GUIs
             if (e.getPlayer().hasPermission("bank.double")) {
                 openBank(e.getPlayer(), 27);
@@ -48,6 +46,7 @@ public class BankerInteract implements Listener {
             Player p = (Player) e.getPlayer();
             // Calculate ending emeralds
             int endEmeralds = 0;
+            ArrayList<ItemStack> inval = new ArrayList<ItemStack>();
             for (ItemStack item : e.getInventory()) {
                 if (item == null || item.getType() == null) {
                     continue;
@@ -56,6 +55,16 @@ public class BankerInteract implements Listener {
                     endEmeralds += item.getAmount();
                 } else if (item.getType() == Material.EMERALD_BLOCK) {
                     endEmeralds += item.getAmount() * 9;
+                } else {
+                    inval.add(item);
+                }
+            }
+            // Return invalid items
+            if (!inval.isEmpty()) {
+                p.sendMessage(ChatColor.RED + "Returning invalid items!");
+                for (ItemStack item : inval) {
+                    e.getInventory().remove(item);
+                    p.getInventory().addItem(item);
                 }
             }
             // Update user balance based on difference
@@ -89,15 +98,12 @@ public class BankerInteract implements Listener {
         }
         // Add bank emeralds to inv bank
         bankBal.put(p, emeralds);
-        while (emeralds > 0) {
-            if (emeralds >= 64) {
-                bank.addItem(new ItemStack(Material.EMERALD, 64));
-                emeralds -= 64;
-            } else {
-                bank.addItem(new ItemStack(Material.EMERALD, emeralds));
-                break;
-            }
+        while (emeralds > 9) {
+            int stacks = Math.min(64, emeralds / 9);
+            emeralds -= 9 * stacks;
+            bank.addItem(new ItemStack(Material.EMERALD_BLOCK, stacks));
         }
+        bank.addItem(new ItemStack(Material.EMERALD, emeralds));
         p.openInventory(bank);
     }
 

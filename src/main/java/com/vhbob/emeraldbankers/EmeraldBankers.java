@@ -2,6 +2,7 @@ package com.vhbob.emeraldbankers;
 
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,6 +24,7 @@ public class EmeraldBankers extends JavaPlugin {
         // Load commands and events
         getCommand("summonBanker").setExecutor(new SummonBanker());
         Bukkit.getPluginManager().registerEvents(new BankerInteract(), this);
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Enabled Emerald Bankers");
     }
 
     private boolean setupEconomy() {
